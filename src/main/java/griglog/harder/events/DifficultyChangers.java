@@ -22,12 +22,12 @@ public class DifficultyChangers {
     static void onChangedDim(PlayerEvent.PlayerChangedDimensionEvent event){
         String dim = event.getTo().location().toString();
         PlayerDifficulty cap = PlayerDifficulty.get(event.getPlayer());
-        for (int t = 0; t < Config.tiers.size(); t++){
+        for (int t = 1; t < Config.tiers.size(); t++){
             DifficultyTier tier = Config.tiers.get(t);
-            if (tier.dimensions.contains(dim) && cap.value < t + 1){
-                for (int i = cap.value; i <= t; i++)
+            if (tier.dimensions.contains(dim) && cap.value < t){
+                for (int i = cap.value + 1; i <= t; i++)
                     event.getPlayer().sendMessage(new StringTextComponent(Config.tiers.get(i).message), Util.NIL_UUID);
-                cap.value = t + 1;
+                cap.value = t;
                 return;
             }
         }
@@ -40,12 +40,12 @@ public class DifficultyChangers {
         ServerPlayerEntity player = (ServerPlayerEntity) e.getSource().getEntity();
         PlayerDifficulty cap = PlayerDifficulty.get(player);
         String id = e.getEntityLiving().getType().getRegistryName().toString();
-        for (int t = 0; t < Config.tiers.size(); t++){
+        for (int t = 1; t < Config.tiers.size(); t++){
             DifficultyTier tier = Config.tiers.get(t);
-            if (tier.bosses.contains(id) && cap.value < t + 1){
-                for (int i = cap.value; i <= t; i++)
+            if (tier.bosses.contains(id) && cap.value < t){
+                for (int i = cap.value + 1; i <= t; i++)
                     player.sendMessage(new StringTextComponent(Config.tiers.get(i).message), Util.NIL_UUID);
-                cap.value = t + 1;
+                cap.value = t;
             }
         }
     }

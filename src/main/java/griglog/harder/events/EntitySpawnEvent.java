@@ -33,7 +33,7 @@ public class EntitySpawnEvent {
         PlayerDifficulty cap = PlayerDifficulty.get(player);
         if (cap.value == 0)
             return;
-        DifficultyTier tier = Config.tiers.get(cap.value - 1);
+        DifficultyTier tier = Config.tiers.get(cap.value);
         ModifiableAttributeInstance attr;
         AttributeModifier mod;
         if ((attr = living.getAttribute(Attributes.MAX_HEALTH)) != null) {

@@ -1,6 +1,7 @@
 package griglog.harder.events;
 
 import griglog.harder.capability.PlayerDifficulty;
+import griglog.harder.commands.CommandGet;
 import griglog.harder.commands.CommandReload;
 import griglog.harder.commands.CommandReset;
 import net.minecraft.command.Commands;
@@ -18,20 +19,15 @@ public class RegistryEvents {
     static class ForgeEvents {
         @SubscribeEvent
         static void registerCommands(RegisterCommandsEvent event){
-            event.getDispatcher().register(Commands
-                    .literal("harder")
-                    .requires(src -> src.hasPermission(4))
-                    .then(
-                            Commands.literal("reload").executes(new CommandReload())
-                    ).then(
-                            Commands.literal("reset")
-                                    .executes(CommandReset::resetSelf)
-                                    .then(
-                                            Commands.argument("player", GameProfileArgument.gameProfile()).executes(CommandReset::resetPlayer)
-                                    ).then(
-                                            Commands.literal("all").executes(CommandReset::resetAll)
-                                    )
-                    ));
+            event.getDispatcher().register(Commands.literal("harder").requires(src -> src.hasPermission(4))
+                .then(Commands.literal("reload").executes(new CommandReload()))
+                .then(Commands.literal("reset").executes(CommandReset::resetSelf)
+                    .then(Commands.argument("player", GameProfileArgument.gameProfile()).executes(CommandReset::resetPlayer))
+                    .then(Commands.literal("all").executes(CommandReset::resetAll)))
+                .then(Commands.literal("get").executes(CommandGet::getSelf)
+                    .then(Commands.argument("player", GameProfileArgument.gameProfile()).executes(CommandGet::getPlayer))
+                )
+            );
         }
     }
 

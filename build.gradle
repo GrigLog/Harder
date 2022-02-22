@@ -16,7 +16,7 @@ apply plugin: 'maven-publish'
 
 version = '1.0'
 group = 'griglog'
-archivesBaseName = 'harder'
+archivesBaseName = 'harder-1.16.5'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(8)
 

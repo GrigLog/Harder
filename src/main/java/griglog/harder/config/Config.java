@@ -4,6 +4,7 @@ import com.google.gson.stream.JsonReader;
 import griglog.harder.Harder;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.lwjgl.system.CallbackI;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -28,14 +29,22 @@ public class Config {
             }
             String file = new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8);
             JSONArray arr = new JSONArray(file);
+            tiers.add(new DifficultyTier());
             for (int i = 0; i < arr.length(); i++) {
                 DifficultyTier tier = new DifficultyTier();
                 JSONObject json = arr.getJSONObject(i);
-                tier.damage = json.has("damage") ? json.getFloat("damage") : 0;
-                tier.health = json.has("health") ? json.getFloat("health") : 0;
-                tier.message = json.getString("message");
-                tier.dimensions = json.has("dimensions") ? (List<String>) (Object) json.getJSONArray("dimensions").toList() : new ArrayList<>();
-                tier.bosses = json.has("bosses") ? (List<String>) (Object) json.getJSONArray("bosses").toList() : new ArrayList<>();
+                if (json.has("damage"))
+                    tier.damage = json.getFloat("damage");
+                if (json.has("health"))
+                    tier.health = json.getFloat("health");
+                if (json.has("exp"))
+                    tier.exp = json.getFloat("exp");
+                if (json.has("message"))
+                    tier.message = json.getString("message");
+                if (json.has("dimensions"))
+                    tier.dimensions = (List<String>) (Object) json.getJSONArray("dimensions").toList();
+                if (json.has("bosses"))
+                    tier.bosses = (List<String>) (Object) json.getJSONArray("bosses").toList();
                 tiers.add(tier);
             }
         } catch (IOException e){
@@ -44,7 +53,7 @@ public class Config {
     }
 
     private final static String defaultConfig = "[\n" +
-            "  {\"damage\": 1.25, \"health\": 1.2, \"dimensions\": [\"minecraft:the_nether\"], \"bosses\": [], \"message\": \"§6Expert mode entered!\"},\n" +
-            "  {\"damage\": 1.5, \"health\": 1.4, \"dimensions\": [\"minecraft:the_end\"], \"bosses\": [\"minecraft:wither\"], \"message\": \"§cMaster mode entered!\"}\n" +
-            "]";
+        "  {\"damage\": 1.25, \"health\": 1.2, \"exp\": 1.5, \"dimensions\": [\"minecraft:the_nether\"], \"bosses\": [], \"message\": \"§6Expert mode entered!\"},\n" +
+        "  {\"damage\": 1.5, \"health\": 1.4, \"exp\": 2.0, \"dimensions\": [\"minecraft:the_end\"], \"bosses\": [\"minecraft:wither\"], \"message\": \"§cMaster mode entered!\"}\n" +
+        "]";
 }
