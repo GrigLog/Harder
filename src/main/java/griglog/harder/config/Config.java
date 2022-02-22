@@ -1,5 +1,6 @@
 package griglog.harder.config;
 
+import com.google.gson.stream.JsonReader;
 import griglog.harder.Harder;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -29,12 +30,12 @@ public class Config {
             JSONArray arr = new JSONArray(file);
             for (int i = 0; i < arr.length(); i++) {
                 DifficultyTier tier = new DifficultyTier();
-                JSONObject obj = arr.getJSONObject(i);
-                tier.damage = obj.getFloat("damage");
-                tier.health = obj.getFloat("health");
-                tier.message = obj.getString("message");
-                tier.dimensions = (List<String>) (Object) obj.getJSONArray("dimensions").toList();
-                tier.bosses = (List<String>) (Object) obj.getJSONArray("bosses").toList();
+                JSONObject json = arr.getJSONObject(i);
+                tier.damage = json.has("damage") ? json.getFloat("damage") : 0;
+                tier.health = json.has("health") ? json.getFloat("health") : 0;
+                tier.message = json.getString("message");
+                tier.dimensions = json.has("dimensions") ? (List<String>) (Object) json.getJSONArray("dimensions").toList() : new ArrayList<>();
+                tier.bosses = json.has("bosses") ? (List<String>) (Object) json.getJSONArray("bosses").toList() : new ArrayList<>();
                 tiers.add(tier);
             }
         } catch (IOException e){
@@ -44,6 +45,6 @@ public class Config {
 
     private final static String defaultConfig = "[\n" +
             "  {\"damage\": 1.25, \"health\": 1.2, \"dimensions\": [\"minecraft:the_nether\"], \"bosses\": [], \"message\": \"§6Expert mode entered!\"},\n" +
-            "  {\"damage\": 1.5, \"health\": 1.4, \"dimensions\": [\"minecraft:the_end\"], \"bosses\": [], \"message\": \"§cMaster mode entered!\"}\n" +
+            "  {\"damage\": 1.5, \"health\": 1.4, \"dimensions\": [\"minecraft:the_end\"], \"bosses\": [\"minecraft:wither\"], \"message\": \"§cMaster mode entered!\"}\n" +
             "]";
 }

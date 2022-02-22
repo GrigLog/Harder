@@ -11,16 +11,9 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
+//NOTE: if you want to declare EventBusSubscriber's like this, you must place the one targeting FORGE first and MOD second.
+//Otherwise one of them is not loaded. I don't know why, hopefully it will be fixed later.
 public class RegistryEvents {
-    @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
-    static class ModEvents{
-        @SubscribeEvent
-        static void setup(FMLCommonSetupEvent event){
-            CapabilityManager.INSTANCE.register(PlayerDifficulty.class, new PlayerDifficulty.Storage(), PlayerDifficulty::new);
-        }
-    }
-
-
     @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.FORGE)
     static class ForgeEvents {
         @SubscribeEvent
@@ -33,12 +26,20 @@ public class RegistryEvents {
                     ).then(
                             Commands.literal("reset")
                                     .executes(CommandReset::resetSelf)
-                                    .then(  //TODO: execute for player, not myself...
+                                    .then(
                                             Commands.argument("player", GameProfileArgument.gameProfile()).executes(CommandReset::resetPlayer)
                                     ).then(
                                             Commands.literal("all").executes(CommandReset::resetAll)
                                     )
                     ));
+        }
+    }
+
+    @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
+    static class ModEvents{
+        @SubscribeEvent
+        static void setup(FMLCommonSetupEvent event){
+            CapabilityManager.INSTANCE.register(PlayerDifficulty.class, new PlayerDifficulty.Storage(), PlayerDifficulty::new);
         }
     }
 }

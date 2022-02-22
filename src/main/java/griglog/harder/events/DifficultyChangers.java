@@ -46,7 +46,6 @@ public class DifficultyChangers {
                 for (int i = cap.value; i <= t; i++)
                     player.sendMessage(new StringTextComponent(Config.tiers.get(i).message), Util.NIL_UUID);
                 cap.value = t + 1;
-                player.sendMessage(new StringTextComponent(tier.message), Util.NIL_UUID);
             }
         }
     }

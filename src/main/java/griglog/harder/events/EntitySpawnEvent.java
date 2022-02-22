@@ -1,6 +1,5 @@
 package griglog.harder.events;
 
-import griglog.harder.Harder;
 import griglog.harder.capability.PlayerDifficulty;
 import griglog.harder.config.Config;
 import griglog.harder.config.DifficultyTier;
@@ -10,7 +9,6 @@ import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -41,12 +39,9 @@ public class EntitySpawnEvent {
         if ((attr = living.getAttribute(Attributes.MAX_HEALTH)) != null) {
             mod = new AttributeModifier(HP_ID, "HarderHp", tier.health - 1, AttributeModifier.Operation.MULTIPLY_TOTAL);
             if (!attr.hasModifier(mod)) {
-                Harder.logger.info(living.getType().getRegistryName().toString());
-                Harder.logger.info("health before: " + living.getMaxHealth());
                 attr.addPermanentModifier(mod);
                 living.setHealth(living.getMaxHealth());
                 living.setHealth(living.getMaxHealth());
-                Harder.logger.info("health after: " + living.getMaxHealth());
             }
         }
         if ((attr = living.getAttribute(Attributes.ATTACK_DAMAGE)) != null) {
