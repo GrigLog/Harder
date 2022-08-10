@@ -1,21 +1,19 @@
 package griglog.harder.config;
 
-import com.google.gson.stream.JsonReader;
-import griglog.harder.Harder;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.lwjgl.system.CallbackI;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import net.minecraft.util.ResourceLocation;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("unchecked")
 public class Config {
     public static List<DifficultyTier> tiers;
     private static final String path = "config/harder.json";
@@ -28,23 +26,23 @@ public class Config {
                 w.close();
             }
             String file = new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8);
-            JSONArray arr = new JSONArray(file);
+            JsonArray arr = new Gson().fromJson(file, JsonArray.class);
             tiers.add(new DifficultyTier());
-            for (int i = 0; i < arr.length(); i++) {
+            for (JsonElement el : arr) {
                 DifficultyTier tier = new DifficultyTier();
-                JSONObject json = arr.getJSONObject(i);
+                JsonObject json = el.getAsJsonObject();
                 if (json.has("damage"))
-                    tier.damage = json.getFloat("damage");
+                    tier.damage = json.get("damage").getAsFloat();
                 if (json.has("health"))
-                    tier.health = json.getFloat("health");
+                    tier.health = json.get("health").getAsFloat();
                 if (json.has("exp"))
-                    tier.exp = json.getFloat("exp");
+                    tier.exp = json.get("exp").getAsFloat();
                 if (json.has("message"))
-                    tier.message = json.getString("message");
+                    tier.message = json.get("message").getAsString();
                 if (json.has("dimensions"))
-                    tier.dimensions = (List<String>) (Object) json.getJSONArray("dimensions").toList();
+                    json.get("dimensions").getAsJsonArray().forEach(e -> tier.dimensions.add(new ResourceLocation(e.getAsString())));
                 if (json.has("bosses"))
-                    tier.bosses = (List<String>) (Object) json.getJSONArray("bosses").toList();
+                    json.get("bosses").getAsJsonArray().forEach(e -> tier.bosses.add(new ResourceLocation(e.getAsString())));
                 tiers.add(tier);
             }
         } catch (IOException e){
@@ -53,7 +51,7 @@ public class Config {
     }
 
     private final static String defaultConfig = "[\n" +
-        "  {\"damage\": 1.25, \"health\": 1.2, \"exp\": 1.5, \"dimensions\": [\"minecraft:the_nether\"], \"bosses\": [], \"message\": \"§6Expert mode entered!\"},\n" +
+        "  {\"damage\": 1.25, \"health\": 1.2, \"exp\": 1.5, \"dimensions\": [\"minecraft:the_nether\"], \"message\": \"§6Expert mode entered!\"},\n" +
         "  {\"damage\": 1.5, \"health\": 1.4, \"exp\": 2.0, \"dimensions\": [\"minecraft:the_end\"], \"bosses\": [\"minecraft:wither\"], \"message\": \"§cMaster mode entered!\"}\n" +
         "]";
 }

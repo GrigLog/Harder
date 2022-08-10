@@ -41,7 +41,6 @@ public class EntitySpawnEvent {
             if (!attr.hasModifier(mod)) {
                 attr.addPermanentModifier(mod);
                 living.setHealth(living.getMaxHealth());
-                living.setHealth(living.getMaxHealth());
             }
         }
         if ((attr = living.getAttribute(Attributes.ATTACK_DAMAGE)) != null) {

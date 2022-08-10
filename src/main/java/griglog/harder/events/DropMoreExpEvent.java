@@ -15,6 +15,8 @@ public class DropMoreExpEvent {
     @SubscribeEvent
     static void onDeath(LivingExperienceDropEvent event){
         PlayerEntity player = event.getAttackingPlayer();
+        if (player == null)
+            return;
         PlayerDifficulty cap = PlayerDifficulty.get(player);
         if (cap.value == 0)
             return;

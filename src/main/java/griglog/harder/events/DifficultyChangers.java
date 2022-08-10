@@ -14,13 +14,12 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import java.util.UUID;
 
 @Mod.EventBusSubscriber
 public class DifficultyChangers {
     @SubscribeEvent
     static void onChangedDim(PlayerEvent.PlayerChangedDimensionEvent event){
-        String dim = event.getTo().location().toString();
+        ResourceLocation dim = event.getTo().location();
         PlayerDifficulty cap = PlayerDifficulty.get(event.getPlayer());
         for (int t = 1; t < Config.tiers.size(); t++){
             DifficultyTier tier = Config.tiers.get(t);
@@ -39,7 +38,7 @@ public class DifficultyChangers {
             return;
         ServerPlayerEntity player = (ServerPlayerEntity) e.getSource().getEntity();
         PlayerDifficulty cap = PlayerDifficulty.get(player);
-        String id = e.getEntityLiving().getType().getRegistryName().toString();
+        ResourceLocation id = e.getEntityLiving().getType().getRegistryName();
         for (int t = 1; t < Config.tiers.size(); t++){
             DifficultyTier tier = Config.tiers.get(t);
             if (tier.bosses.contains(id) && cap.value < t){
