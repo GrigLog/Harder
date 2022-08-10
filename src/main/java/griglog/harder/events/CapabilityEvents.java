@@ -1,10 +1,8 @@
 package griglog.harder.events;
 
-import griglog.harder.Harder;
 import griglog.harder.capability.PlayerDifficulty;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -15,7 +13,7 @@ public class CapabilityEvents {
     @SubscribeEvent
     static void playerCapability(AttachCapabilitiesEvent<Entity> event) {
         if (event.getObject() instanceof PlayerEntity) {
-            event.addCapability(new ResourceLocation(Harder.id, "difficulty"), new PlayerDifficulty.Provider());
+            event.addCapability(PlayerDifficulty.ID, new PlayerDifficulty.Provider());
         }
     }
     @SubscribeEvent
