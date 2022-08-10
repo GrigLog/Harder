@@ -4,7 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import org.apache.commons.io.output.FileWriterWithEncoding;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -21,7 +22,7 @@ public class Config {
         try {
             tiers = new ArrayList<>();
             if (!Files.exists(Paths.get(path))) {
-                FileWriter w = new FileWriter(path);
+                FileWriterWithEncoding w = new FileWriterWithEncoding(path, StandardCharsets.UTF_8);
                 w.write(defaultConfig);
                 w.close();
             }
@@ -50,8 +51,9 @@ public class Config {
         }
     }
 
-    private final static String defaultConfig = "[\n" +
-        "  {\"damage\": 1.25, \"health\": 1.2, \"exp\": 1.5, \"dimensions\": [\"minecraft:the_nether\"], \"message\": \"§6Expert mode entered!\"},\n" +
-        "  {\"damage\": 1.5, \"health\": 1.4, \"exp\": 2.0, \"dimensions\": [\"minecraft:the_end\"], \"bosses\": [\"minecraft:wither\"], \"message\": \"§cMaster mode entered!\"}\n" +
-        "]";
+    private final static String defaultConfig = """
+        [
+          {"damage": 1.25, "health": 1.2, "exp": 1.5, "dimensions": ["minecraft:the_nether"], "message": "\u00a76Expert mode entered!"},
+          {"damage": 1.5, "health": 1.4, "exp": 2.0, "dimensions": ["minecraft:the_end"], "bosses": ["minecraft:wither"], "message": "\u00a7cMaster mode entered!"}
+        ]""";
 }

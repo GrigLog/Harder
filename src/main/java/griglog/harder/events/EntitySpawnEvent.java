@@ -3,11 +3,11 @@ package griglog.harder.events;
 import griglog.harder.capability.PlayerDifficulty;
 import griglog.harder.config.Config;
 import griglog.harder.config.DifficultyTier;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -26,7 +26,7 @@ public class EntitySpawnEvent {
         LivingEntity living = (LivingEntity) event.getEntity();
         if (living.getType().getCategory().isFriendly())  //could as well check (category != MONSTER)
             return;
-        PlayerEntity player = event.getWorld().getNearestPlayer(living, Integer.MAX_VALUE);
+        Player player = event.getWorld().getNearestPlayer(living, Integer.MAX_VALUE);
         if (player == null){
             return;
         }
@@ -34,7 +34,7 @@ public class EntitySpawnEvent {
         if (cap.value == 0)
             return;
         DifficultyTier tier = Config.tiers.get(cap.value);
-        ModifiableAttributeInstance attr;
+        AttributeInstance attr;
         AttributeModifier mod;
         if ((attr = living.getAttribute(Attributes.MAX_HEALTH)) != null) {
             mod = new AttributeModifier(HP_ID, "HarderHp", tier.health - 1, AttributeModifier.Operation.MULTIPLY_TOTAL);
@@ -49,6 +49,5 @@ public class EntitySpawnEvent {
                 attr.addPermanentModifier(mod);
             }
         }
-
     }
 }

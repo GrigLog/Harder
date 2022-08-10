@@ -1,8 +1,6 @@
 package griglog.harder.config;
 
-import net.minecraft.util.ResourceLocation;
-
-import java.util.ArrayList;
+import net.minecraft.resources.ResourceLocation;
 import java.util.HashSet;
 import java.util.Set;
 

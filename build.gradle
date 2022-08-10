@@ -9,22 +9,22 @@ buildscript {
         classpath 'org.parchmentmc:librarian:1.+'
     }
 }
+plugins {
+    id 'eclipse'
+    id 'maven-publish'
+}
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
-apply plugin: 'eclipse'
-apply plugin: 'maven-publish'
 
 version = '1.1'
 group = 'griglog'
-archivesBaseName = 'harder-1.16.5'
+archivesBaseName = 'harder-1.18.2'
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(8)
-
-
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
-    mappings channel: 'parchment', version: '2021.10.17-1.16.5'
+    mappings channel: 'parchment', version: '2022.08.07-1.18.2'
     runs {
         client {
             workingDirectory project.file('run')
@@ -32,7 +32,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                examplemod {
+                harder {
                     source sourceSets.main
                 }
             }
@@ -42,9 +42,28 @@ minecraft {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
+            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
+            property 'forge.enabledGameTestNamespaces', 'harder'
+            mods {
+                harder {
+                    source sourceSets.main
+                }
+            }
+        }
+
+
+        // This run config launches GameTestServer and runs all registered gametests, then exits.
+        // By default, the server will crash when no gametests are provided.
+        // The gametest system is also enabled by default for other run configs under the /test command.
+        gameTestServer {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
+            property 'forge.enabledGameTestNamespaces', 'harder'
 
             mods {
-                examplemod {
+                harder {
                     source sourceSets.main
                 }
             }
@@ -54,10 +73,10 @@ minecraft {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
-            args '--mod', 'examplemod', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            args '--mod', 'harder', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
             mods {
-                examplemod {
+                harder {
                     source sourceSets.main
                 }
             }
@@ -77,20 +96,19 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.5-36.2.23'
-    runtimeOnly fg.deobf("curse.maven:neat-238372:3182258")
-    runtimeOnly fg.deobf("curse.maven:damage-debug-581818:3655298")
+    minecraft 'net.minecraftforge:forge:1.18.2-40.1.0'
+    runtimeOnly fg.deobf('curse.maven:neat-238372:3593906')
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..
 jar {
     manifest.attributes([
-            "Specification-Title": "examplemod",
-            "Specification-Vendor": "examplemodsareus",
+            "Specification-Title": "harder",
+            "Specification-Vendor": "hardersareus",
             "Specification-Version": "1", // We are version 1 of ourselves
             "Implementation-Title": project.name,
             "Implementation-Version": "${version}",
-            "Implementation-Vendor" :"examplemodsareus",
+            "Implementation-Vendor" :"hardersareus",
             "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
 }
@@ -117,6 +135,10 @@ publishing {
 task deobfJar(type: Jar) {
     archiveClassifier.set('deobf')
     from sourceSets.main.output
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
 }
 
 

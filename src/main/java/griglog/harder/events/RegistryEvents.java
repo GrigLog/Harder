@@ -4,9 +4,10 @@ import griglog.harder.capability.PlayerDifficulty;
 import griglog.harder.commands.CommandGet;
 import griglog.harder.commands.CommandReload;
 import griglog.harder.commands.CommandReset;
-import net.minecraft.command.Commands;
-import net.minecraft.command.arguments.GameProfileArgument;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.GameProfileArgument;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -34,8 +35,8 @@ public class RegistryEvents {
     @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
     static class ModEvents{
         @SubscribeEvent
-        static void setup(FMLCommonSetupEvent event){
-            CapabilityManager.INSTANCE.register(PlayerDifficulty.class, new PlayerDifficulty.Storage(), PlayerDifficulty::new);
+        static void setup(RegisterCapabilitiesEvent event){
+            event.register(PlayerDifficulty.class);
         }
     }
 }

@@ -3,9 +3,7 @@ package griglog.harder.events;
 import griglog.harder.capability.PlayerDifficulty;
 import griglog.harder.config.Config;
 import griglog.harder.config.DifficultyTier;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.living.LivingExperienceDropEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -14,7 +12,7 @@ import net.minecraftforge.fml.common.Mod;
 public class DropMoreExpEvent {
     @SubscribeEvent
     static void onDeath(LivingExperienceDropEvent event){
-        PlayerEntity player = event.getAttackingPlayer();
+        Player player = event.getAttackingPlayer();
         if (player == null)
             return;
         PlayerDifficulty cap = PlayerDifficulty.get(player);

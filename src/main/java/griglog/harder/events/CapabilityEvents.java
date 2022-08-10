@@ -1,8 +1,8 @@
 package griglog.harder.events;
 
 import griglog.harder.capability.PlayerDifficulty;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -12,7 +12,7 @@ import net.minecraftforge.fml.common.Mod;
 public class CapabilityEvents {
     @SubscribeEvent
     static void playerCapability(AttachCapabilitiesEvent<Entity> event) {
-        if (event.getObject() instanceof PlayerEntity) {
+        if (event.getObject() instanceof Player) {
             event.addCapability(PlayerDifficulty.ID, new PlayerDifficulty.Provider());
         }
     }

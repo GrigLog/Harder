@@ -4,41 +4,40 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import griglog.harder.capability.PlayerDifficulty;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.arguments.GameProfileArgument;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.arguments.GameProfileArgument;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.server.level.ServerPlayer;
 
 public class CommandGet {
-    public static int getPlayer(CommandContext<CommandSource> ctx){
+    public static int getPlayer(CommandContext<CommandSourceStack> ctx){
         try {
             MinecraftServer server = ctx.getSource().getServer();
             for (GameProfile p : GameProfileArgument.getGameProfiles(ctx, "player")){
-                ServerPlayerEntity player = server.getPlayerList().getPlayer(p.getId());
+                ServerPlayer player = server.getPlayerList().getPlayer(p.getId());
                 if (player != null)
                     printDifficulty(ctx.getSource(), PlayerDifficulty.get(player).value);
             }
         } catch (CommandSyntaxException e) {
             e.printStackTrace();
-            ctx.getSource().sendFailure(new StringTextComponent("Command syntax error."));
+            ctx.getSource().sendFailure(new TextComponent("Command syntax error."));
             return 1;
         }
         return 0;
     }
 
-    public static int getSelf(CommandContext<CommandSource> ctx){
-        if (!(ctx.getSource().getEntity() instanceof ServerPlayerEntity)){
-            ctx.getSource().sendFailure(new StringTextComponent("You are not a player. You have no difficulty attached."));
+    public static int getSelf(CommandContext<CommandSourceStack> ctx){
+        if (!(ctx.getSource().getEntity() instanceof ServerPlayer)){
+            ctx.getSource().sendFailure(new TextComponent("You are not a player. You have no difficulty attached."));
             return 1;
         }
-        ServerPlayerEntity player = (ServerPlayerEntity) ctx.getSource().getEntity();
+        ServerPlayer player = (ServerPlayer) ctx.getSource().getEntity();
         printDifficulty(ctx.getSource(), PlayerDifficulty.get(player).value);
         return 0;
     }
 
-    private static void printDifficulty(CommandSource src, int d){
-        src.sendSuccess(new StringTextComponent("Player difficulty: " + d), true);
+    private static void printDifficulty(CommandSourceStack src, int d){
+        src.sendSuccess(new TextComponent("Player difficulty: " + d), true);
     }
 }
