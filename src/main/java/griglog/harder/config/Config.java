@@ -7,7 +7,6 @@ import com.google.gson.JsonObject;
 import net.minecraft.resources.ResourceLocation;
 import org.apache.commons.io.output.FileWriterWithEncoding;
 
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -42,8 +41,10 @@ public class Config {
                     tier.message = json.get("message").getAsString();
                 if (json.has("dimensions"))
                     json.get("dimensions").getAsJsonArray().forEach(e -> tier.dimensions.add(new ResourceLocation(e.getAsString())));
-                if (json.has("bosses"))
-                    json.get("bosses").getAsJsonArray().forEach(e -> tier.bosses.add(new ResourceLocation(e.getAsString())));
+                if (json.has("mobs"))
+                    json.get("mobs").getAsJsonArray().forEach(e -> tier.mobs.add(new ResourceLocation(e.getAsString())));
+                if (json.has("items"))
+                    json.get("items").getAsJsonArray().forEach(e -> tier.items.add(new ResourceLocation(e.getAsString())));
                 tiers.add(tier);
             }
         } catch (IOException e){
@@ -53,7 +54,7 @@ public class Config {
 
     private final static String defaultConfig = """
         [
-          {"damage": 1.25, "health": 1.2, "exp": 1.5, "dimensions": ["minecraft:the_nether"], "message": "\u00a76Expert mode entered!"},
-          {"damage": 1.5, "health": 1.4, "exp": 2.0, "dimensions": ["minecraft:the_end"], "bosses": ["minecraft:wither"], "message": "\u00a7cMaster mode entered!"}
+          {"damage": 1.25, "health": 1.2, "exp": 1.5, "dimensions": ["minecraft:the_nether"], "items": ["minecraft:diamond"], "message": "\u00a76Expert mode entered!"},
+          {"damage": 1.5, "health": 1.4, "exp": 2.0, "dimensions": ["minecraft:the_end"], "mobs": ["minecraft:wither"], "message": "\u00a7cMaster mode entered!"}
         ]""";
 }

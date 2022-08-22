@@ -1,6 +1,7 @@
 package griglog.harder.commands;
 
 import com.mojang.authlib.GameProfile;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import griglog.harder.capability.PlayerDifficulty;
@@ -41,7 +42,7 @@ public class CommandReset {
         return 0;
     }
 
-    public static int resetAll(CommandContext<CommandSourceStack> ctx){ //TODO: also reset offline players?
+    public static int resetAll(CommandContext<CommandSourceStack> ctx){
         for (ServerPlayer player : ctx.getSource().getServer().getPlayerList().getPlayers()){
             reset(player, PlayerDifficulty.get(player));
         }

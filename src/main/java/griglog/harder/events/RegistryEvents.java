@@ -1,9 +1,11 @@
 package griglog.harder.events;
 
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import griglog.harder.capability.PlayerDifficulty;
 import griglog.harder.commands.CommandGet;
 import griglog.harder.commands.CommandReload;
 import griglog.harder.commands.CommandReset;
+import griglog.harder.commands.CommandSet;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.GameProfileArgument;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -26,8 +28,11 @@ public class RegistryEvents {
                     .then(Commands.argument("player", GameProfileArgument.gameProfile()).executes(CommandReset::resetPlayer))
                     .then(Commands.literal("all").executes(CommandReset::resetAll)))
                 .then(Commands.literal("get").executes(CommandGet::getSelf)
-                    .then(Commands.argument("player", GameProfileArgument.gameProfile()).executes(CommandGet::getPlayer))
-                )
+                    .then(Commands.argument("player", GameProfileArgument.gameProfile()).executes(CommandGet::getPlayer)))
+                .then(Commands.literal("set")
+                    .then(Commands.argument("value", IntegerArgumentType.integer()).executes(CommandSet::setSelf)
+                        .then(Commands.argument("player", GameProfileArgument.gameProfile()).executes(CommandSet::setPlayer))
+                        .then(Commands.literal("all").executes(CommandSet::setAll))))
             );
         }
     }
