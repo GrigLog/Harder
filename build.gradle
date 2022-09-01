@@ -16,7 +16,7 @@ plugins {
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 
-version = '1.1'
+version = '1.2.1'
 group = 'griglog'
 archivesBaseName = 'harder-1.18.2'
 
