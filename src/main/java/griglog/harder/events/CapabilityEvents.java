@@ -18,6 +18,7 @@ public class CapabilityEvents {
     }
     @SubscribeEvent
     static void copyPlayerDataOnRespawn(PlayerEvent.Clone event) {
+        event.getOriginal().reviveCaps(); //without this Forge does not allow accessing capabilities
         PlayerDifficulty cap = PlayerDifficulty.get(event.getOriginal());
         PlayerDifficulty capNew = PlayerDifficulty.get(event.getPlayer());
         if (cap != null && capNew != null)
